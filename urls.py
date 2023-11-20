@@ -1,18 +1,23 @@
-from django.urls import path
-from .views import (
-    SmartphoneListCreateView, SmartphoneDetailView,
-    OrderListCreateView, OrderDetailView,
-    BillListCreateView, BillDetailView,
-    ReceiptListCreateView, ReceiptDetailView
+from django.contrib import admin
+from django.urls import path, include
+from rest_framework import permissions
+from drf_yasg.views import get_schema_view
+from drf_yasg import openapi
+schema_view = get_schema_view(
+   openapi.Info(
+      title="Smart Phone Store Services API",
+      default_version='v1',
+      description="Store API",
+      terms_of_service="https://computerlearningcenter.website2.me/",
+      contact=openapi.Contact(email="adnanmajeed82@gmail.com"),
+      license=openapi.License(name="BSD License"),
+   ),
+   public=True,
+   permission_classes=(permissions.AllowAny,),
 )
 
 urlpatterns = [
-    path('smartphones/', SmartphoneListCreateView.as_view(), name='smartphone-list'),
-    path('smartphones/<int:pk>/', SmartphoneDetailView.as_view(), name='smartphone-detail'),
-    path('orders/', OrderListCreateView.as_view(), name='order-list'),
-    path('orders/<int:pk>/', OrderDetailView.as_view(), name='order-detail'),
-    path('bills/', BillListCreateView.as_view(), name='bill-list'),
-    path('bills/<int:pk>/', BillDetailView.as_view(), name='bill-detail'),
-    path('receipts/', ReceiptListCreateView.as_view(), name='receipt-list'),
-    path('receipts/<int:pk>/', ReceiptDetailView.as_view(), name='receipt-detail'),
+    path('admin/', admin.site.urls),
+    path('api/', include('store.urls')),
+    path('', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
 ]
